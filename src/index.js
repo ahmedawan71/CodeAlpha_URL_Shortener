@@ -15,11 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 // Serve frontend
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-/**
- * POST /api/shorten
- * Body: { url: "https://example.com" }
- * Response: { code, shortUrl, url }
- */
 app.post('/api/shorten', async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).json({ error: 'Missing url in body' });
@@ -57,9 +52,6 @@ app.post('/api/shorten', async (req, res) => {
   return res.status(500).json({ error: 'Could not generate unique code' });
 });
 
-/**
- * GET /:code -> redirect to original URL
- */
 app.get('/:code', async (req, res) => {
   const { code } = req.params;
   const link = await prisma.link.findUnique({ where: { code } });
